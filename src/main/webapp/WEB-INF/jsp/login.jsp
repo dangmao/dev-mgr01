@@ -4,17 +4,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Login</title>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<!--     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <link href="static/demo.css" rel="stylesheet" type="text/css" />
-
+ -->
     <style type="text/css">
     body
     {
         width:100%;height:100%;margin:0;overflow:hidden;
     }
     </style>
+<!--    
     <script src="static/scripts/boot.js" type="text/javascript"></script>
-    
+  -->   
 </head>
 <body >   
     <form name="login" action="login.do" method="post">

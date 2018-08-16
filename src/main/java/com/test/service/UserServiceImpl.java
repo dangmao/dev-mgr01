@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import com.test.mapper.TbUsersMapper;
 import com.test.pojo.TbUsers;
 
-
 @Service("userService") 
 @ComponentScan("com.test.service")
 public class UserServiceImpl implements UserService {  

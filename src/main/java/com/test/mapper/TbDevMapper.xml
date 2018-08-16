@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.mapper.TbDevMapper">
+  <resultMap id="BaseResultMap" type="com.test.pojo.TbDev">
+    <id column="did" jdbcType="VARCHAR" property="did" />
+    <result column="dname" jdbcType="VARCHAR" property="dname" />
+    <result column="catalog" jdbcType="VARCHAR" property="catalog" />
+    <result column="comment" jdbcType="VARCHAR" property="comment" />
+    <result column="uname" jdbcType="VARCHAR" property="uname" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    did, dname, catalog, comment, uname
+  </sql>
+  <select id="selectByExample" parameterType="com.test.pojo.TbDevExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tb_dev
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tb_dev
+    where did = #{did,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from tb_dev
+    where did = #{did,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.test.pojo.TbDevExample">
+    delete from tb_dev
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.test.pojo.TbDev">
+    insert into tb_dev (did, dname, catalog, 
+      comment, uname)
+    values (#{did,jdbcType=VARCHAR}, #{dname,jdbcType=VARCHAR}, #{catalog,jdbcType=VARCHAR}, 
+      #{comment,jdbcType=VARCHAR}, #{uname,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.test.pojo.TbDev">
+    insert into tb_dev
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="did != null">
+        did,
+      </if>
+      <if test="dname != null">
+        dname,
+      </if>
+      <if test="catalog != null">
+        catalog,
+      </if>
+      <if test="comment != null">
+        comment,
+      </if>
+      <if test="uname != null">
+        uname,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="did != null">
+        #{did,jdbcType=VARCHAR},
+      </if>
+      <if test="dname != null">
+        #{dname,jdbcType=VARCHAR},
+      </if>
+      <if test="catalog != null">
+        #{catalog,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="uname != null">
+        #{uname,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.test.pojo.TbDevExample" resultType="java.lang.Long">
+    select count(*) from tb_dev
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update tb_dev
+    <set>
+      <if test="record.did != null">
+        did = #{record.did,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dname != null">
+        dname = #{record.dname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.catalog != null">
+        catalog = #{record.catalog,jdbcType=VARCHAR},
+      </if>
+      <if test="record.comment != null">
+        comment = #{record.comment,jdbcType=VARCHAR},
+      </if>
+      <if test="record.uname != null">
+        uname = #{record.uname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update tb_dev
+    set did = #{record.did,jdbcType=VARCHAR},
+      dname = #{record.dname,jdbcType=VARCHAR},
+      catalog = #{record.catalog,jdbcType=VARCHAR},
+      comment = #{record.comment,jdbcType=VARCHAR},
+      uname = #{record.uname,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.test.pojo.TbDev">
+    update tb_dev
+    <set>
+      <if test="dname != null">
+        dname = #{dname,jdbcType=VARCHAR},
+      </if>
+      <if test="catalog != null">
+        catalog = #{catalog,jdbcType=VARCHAR},
+      </if>
+      <if test="comment != null">
+        comment = #{comment,jdbcType=VARCHAR},
+      </if>
+      <if test="uname != null">
+        uname = #{uname,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where did = #{did,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.test.pojo.TbDev">
+    update tb_dev
+    set dname = #{dname,jdbcType=VARCHAR},
+      catalog = #{catalog,jdbcType=VARCHAR},
+      comment = #{comment,jdbcType=VARCHAR},
+      uname = #{uname,jdbcType=VARCHAR}
+    where did = #{did,jdbcType=VARCHAR}
+  </update>
+</mapper>

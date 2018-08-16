@@ -21,8 +21,13 @@ public class UserController {
      @Resource  
      private UserService userService;
      
-     @RequestMapping(value={"/","/login"})
+     @RequestMapping(value={"/"})
      public String index(HttpServletRequest request){
+    	 return "index";
+     }
+     
+     @RequestMapping("/login")
+     public String login(HttpServletRequest request){
     	 String username = (String) request.getSession().getAttribute("currentUser");
     	 if(username == null||username.equals(""))
     		 return "login";
