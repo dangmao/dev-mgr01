@@ -7,9 +7,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;  
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;  
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.test.pojo.TbUsers;
 import com.test.service.UserService;
@@ -21,7 +24,7 @@ public class UserController {
      @Resource  
      private UserService userService;
      
-     @RequestMapping(value={"/"})
+     @RequestMapping(value={"/","/index"})
      public String index(HttpServletRequest request){
     	 return "index";
      }
@@ -35,44 +38,54 @@ public class UserController {
      }
      
      @RequestMapping(value = "/login.do", method = RequestMethod.POST)
+     @ResponseBody
  	 public String userlogin(TbUsers user,ModelMap model,HttpServletRequest request) {
  		if (!userService.isUserExist(user.getUname())) {
- 			model.addAttribute("msg", "用户名密码错误！");
  			return "login";
  		} else {
  			if (user.getPassword().equals(userService.findUsersByUsername(user.getUname()).getPassword())) {
- 				model.addAttribute("msg", "登录成功！");
  				request.getSession().setAttribute("currentUser", user.getUname());
  				return "index";
  			} else {
- 				model.addAttribute("msg", "用户名密码错误！");
  				return "login";
  			}
  		}
  	}
+     
      @RequestMapping(value = "/modifyPassword")
      public String modifyView(){
     	 return "modifyPassword";
      }
+     
      @RequestMapping(value = "/modifyPassword.do", method = RequestMethod.POST)
+     @ResponseBody
  	 public String modifyPassword( @RequestParam("pwd_old") String pwd_old, @RequestParam("pwd_new") String pwd_new, @RequestParam("pwd_new2") String pwd_new2, HttpServletRequest request, ModelMap model) {
     	 String username = (String) request.getSession().getAttribute("currentUser");
     	 if(username == null||username.length()==0) return "login";
     	 if(pwd_new==null||!pwd_new.equals(pwd_new2)){
-    		 model.addAttribute("msg", "新密码输入不一致");
-    		 return "modifyPassword";
+    		 //两次密码输入不一致
+    		 return "1";
     	 }
  			if (pwd_old.equals(userService.findUsersByUsername(username).getPassword())) {
  				if(userService.modifyPasswordByUsername(username, pwd_new)){
- 					model.addAttribute("msg", "修改密码成功！");
+ 					//修改密码成功
+ 					return "0";
  				}else{
- 					model.addAttribute("msg", "修改密码失败！");
+ 					//修改密码失败
+ 					return "2";
  				}
  			} else {
- 				model.addAttribute("msg", "密码错误！");
+ 				//密码错误
+ 				return "3";
  			}
- 		return "modifyPassword";
  		}
+     
+     
+     @RequestMapping("/search")
+     public String search(){
+    	 return "search";
+     }
+     
      @RequestMapping("/logout.do")
      public String logout(HttpServletRequest request){
     	 request.getSession().removeAttribute("currentUser");

@@ -1,0 +1,10 @@
+﻿[
+	{ "id": "1", iconCls: "fa fa-send-o", text: "用户信息", children: [
+        { "id": "1_1", iconCls: "fa fa-desktop", text: "修改密码", url: "modifyPassword" }
+	    ]
+	},
+    { "id": "xtgl", iconCls: "fa fa-leaf", text: "设备管理", children: [
+        { "id": "xzgl", iconCls: "fa fa-search", text: "查询设备", url: "search" }
+    ]
+    }
+]

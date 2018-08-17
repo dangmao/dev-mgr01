@@ -26,7 +26,7 @@ public class LoginFilter implements Filter{
 		String targetUrl = currentUrl.substring(contextPath.length());
 		HttpSession session = request.getSession();
 		
-		if(targetUrl.indexOf("login")>0){
+		if(targetUrl.indexOf("login")>0||targetUrl.indexOf("resources")>0){
 			filterChain.doFilter(request, response);
 		}else{
 			if(session==null||session.getAttribute("currentUser")==null){

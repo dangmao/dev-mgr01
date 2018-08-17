@@ -1,31 +1,128 @@
-<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
+﻿<%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>Login</title>
-<!--     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <link href="static/demo.css" rel="stylesheet" type="text/css" />
- -->
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" /><link href="resources/demo.css" rel="stylesheet" type="text/css" />
+
     <style type="text/css">
     body
     {
         width:100%;height:100%;margin:0;overflow:hidden;
     }
     </style>
-<!--    
-    <script src="static/scripts/boot.js" type="text/javascript"></script>
-  -->   
+    <script src="resources/scripts/boot.js" type="text/javascript"></script>
+    
 </head>
 <body >   
-    <form name="login" action="login.do" method="post">
-	用户名: 
-		<input type="text" id="uname" name="uname"  size="20"/>
-	<br />密  码: 
-	<input type="password" id="password" name="password" size="20"/>
-	<br />
-		<input type="submit" value="登录"/>
-	</form> 
-	<p style="color:red">${msg}</p><hr>
+<div id="loginWindow" class="mini-window" title="用户登录" style="width:350px;height:165px;" 
+   showModal="true" showCloseButton="false"
+    >
+
+    <div id="loginForm" style="padding:15px;padding-top:10px;">
+        <table >
+            <tr>
+                <td style="width:60px;"><label for="uname$text">帐号：</label></td>
+                <td>
+                    <input id="uname" name="uname" onvalidation="onUserNameValidation" class="mini-textbox" required="true" style="width:150px;"/>
+                </td>    
+            </tr>
+            <tr>
+                <td style="width:60px;"><label for="password$text">密码：</label></td>
+                <td>
+                    <input id="password" name="password" onvalidation="onPwdValidation" class="mini-password" requiredErrorText="密码不能为空" required="true" style="width:150px;" onenter="onLoginClick"/>
+                    &nbsp;&nbsp;<a href="#" >忘记密码?</a>
+                </td>
+            </tr>            
+            <tr>
+                <td></td>
+                <td style="padding-top:5px;">
+                    <a onclick="onLoginClick" class="mini-button" style="width:60px;">登录</a>
+                    <a onclick="onResetClick" class="mini-button" style="width:60px;">重置</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+
+    
+
+    
+    <script type="text/javascript">
+        mini.parse();
+
+        var loginWindow = mini.get("loginWindow");
+        loginWindow.show();
+
+        function onLoginClick(e) {
+            var form = new mini.Form("#loginWindow");
+
+            form.validate();
+            if (form.isValid() == false) return;
+
+            var data = form.getData();      //获取表单多个控件的数据
+            //var json = mini.encode(data);   //序列化成JSON
+            var json = $.parseJSON(mini.encode(data));
+            $.ajax({
+                url: "login.do",
+                type: "post",
+                //data: { submitData: json },
+                data:json,
+                success: function (text) {
+                    //alert("提交成功"+json+"，返回结果:" + text);
+                    loginWindow.hide();
+                    if(text == "index"){
+                    	mini.loading("登录成功，马上转到系统...", "登录成功");
+                        setTimeout(function () {
+                            window.location = "/dev-mgr01/index";
+                        }, 1500);
+                    	
+                    }else{
+                    	mini.loading("用户名密码错误", "登录失败");
+                        setTimeout(function () {
+                            window.location = "/dev-mgr01/login";
+                        }, 1500);
+                    }
+                    	
+                    
+                },
+                error:function () {
+                    alert("yichang");
+                }
+            })
+            /**/
+        }
+        function onResetClick(e) {
+            var form = new mini.Form("#loginWindow");
+            form.clear();
+        }
+        /////////////////////////////////////
+        function isEmail(s) {
+            if (s.search(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/) != -1)
+                return true;
+            else
+                return false;
+        }
+        function onUserNameValidation(e) {
+            if (e.isValid) {
+                if (isEmail(e.value) == false) {
+                    e.errorText = "必须输入邮件地址";
+                    e.isValid = false;
+                }
+            }
+        }
+        function onPwdValidation(e) {
+            if (e.isValid) {
+                if (e.value.length < 5) {
+                    e.errorText = "密码不能少于5个字符";
+                    e.isValid = false;
+                }
+            }
+        }
+    </script>
+
 </body>
 </html>
